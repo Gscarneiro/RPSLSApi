@@ -13,11 +13,11 @@ namespace RPSLS.Api.Data.DTO
         public virtual Player PlayerOne { get; set; }
         public virtual Player PlayerTwo { get; set; }
 
-        public static Room Create(string playerName)
+        public static Room Create(string playerName, bool publicRoom = true)
         {
             return new Room() {
                 Id = Guid.NewGuid(),
-                Public = true,
+                Public = publicRoom,
                 PlayerOne = Player.Create(playerName),
                 GamesList = [Game.Create()]
             };

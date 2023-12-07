@@ -18,9 +18,9 @@ namespace RPSLS.Api.Controllers
 
 
         [HttpPost("")]
-        public IActionResult CreateRoom(String playerName)
+        public IActionResult CreateRoom(String playerName, bool publicRoom = true)
         {
-            var room = RoomModel.FromDTO(roomService.CreateRoom(playerName));
+            var room = RoomModel.FromDTO(roomService.CreateRoom(playerName, publicRoom));
 
             return Ok(room);
         }

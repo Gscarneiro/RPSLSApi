@@ -33,16 +33,5 @@ namespace RPSLS.Api.Data.Models
                 Result = dto.Result,
             };
         }
-    }
-
-    public static class GameModelExtension
-    {
-        public static Game ToDTO(this GameModel model)
-        {
-            return new Game() {
-                Id = model.Id,
-            };
-        }
-    }
-        
+    }        
 }

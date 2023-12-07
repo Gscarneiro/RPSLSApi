@@ -28,18 +28,4 @@ namespace RPSLS.Api.Data.Models
             };
         }
     }
-
-    public static class RoomModelExtension
-    {
-        public static Room ToDTO(this RoomModel model)
-        {
-            return new Room() {
-                Id = model.Id,
-                PlayerOneId = model.PlayerOne?.Id,
-                PlayerTwoId = model.PlayerTwo?.Id,
-                Public = model.Public,
-                GamesList = model.GamesList.Select(g => g.ToDTO()).ToList()
-            };
-        }
-    }
 }

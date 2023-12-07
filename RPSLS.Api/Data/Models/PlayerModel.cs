@@ -19,14 +19,4 @@ namespace RPSLS.Api.Data.Models
             } : null;
         }
     }
-
-    public static class PlayerModelExtension
-    {
-        public static Player ToDTO(this PlayerModel model)
-        {
-            return new Player() {
-                Id = model.Id,
-            };
-        }
-    }
 }
