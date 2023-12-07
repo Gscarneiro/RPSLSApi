@@ -4,8 +4,8 @@
     {
         WaitingForPlayerToJoin,
         GameStarted,
-        WaitingForPlayerToPlay,
-        BothPlayed,
+        WaitingForPlayerToSelect,
+        BothSelected,
         GameEnded,
     }
 }

@@ -4,8 +4,8 @@ using RPSLS.Api.Repositories;
 
 namespace RPSLS.Api.Interfaces
 {
-    public interface IRoomRepository : IBaseRepository<Room>
+    public interface IGameRepository : IBaseRepository<Game>
     {
-        List<Room> List(bool? publicRoom = null, bool showFull = false);
+        List<Game> List(Guid roomId);
     }
 }

@@ -4,25 +4,24 @@ using RPSLS.Api.Interfaces;
 
 namespace RPSLS.Api.Repositories
 {
-    public class RoomRepository : BaseRepository<Room>, IRoomRepository
+    public class RoomRepository(RPSLSDbContext context) : BaseRepository<Room>(context), IRoomRepository
     {
-        public RoomRepository(RPSLSDbContext context) : base(context)
-        {
-        }
 
-        public Room CreateRoom(string playerName)
+        public List<Room> List(bool? publicRoom = null, bool showFull = false)
         {
-            throw new NotImplementedException();
-        }
+            var query = Query();
+            
+            if(publicRoom.HasValue) {
+                query = query.Where(x => x.Public == publicRoom);
+            }
 
-        public Room JoinRoom(Guid room, string playerName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Room LeaveRoom(Guid room, string playerName)
-        {
-            throw new NotImplementedException();
+            if(showFull) {
+                query = query.Where(x => x.PlayerOneId.HasValue && x.PlayerTwoId.HasValue);
+            } else {
+                query = query.Where(x => !x.PlayerOneId.HasValue || !x.PlayerTwoId.HasValue);
+            }
+            
+            return query.ToList();
         }
     }
 }

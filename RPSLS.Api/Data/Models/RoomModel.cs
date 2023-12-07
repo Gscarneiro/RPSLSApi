@@ -14,6 +14,10 @@ namespace RPSLS.Api.Data.Models
         public PlayerModel? PlayerTwo{ get; set; }
         [JsonPropertyName("public")]
         public bool Public { get; set; }
+
+        [JsonPropertyName("playerCount")]
+        public int PlayerCount { get; set; }
+
         [JsonPropertyName("gamesList")]
         public List<GameModel> GamesList { get; set; } = new List<GameModel>();
 
@@ -24,6 +28,7 @@ namespace RPSLS.Api.Data.Models
                 PlayerOne = PlayerModel.FromDTO(dto.PlayerOne),
                 PlayerTwo = PlayerModel.FromDTO(dto.PlayerTwo),
                 Public = dto.Public,
+                PlayerCount = (dto.PlayerOneId.HasValue ? 1 : 0) + (dto.PlayerTwoId.HasValue ? 1 : 0),
                 GamesList = dto.GamesList?.Select(g => GameModel.FromDTO(g)).ToList()
             };
         }

@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using RPSLS.Api.Data;
+using RPSLS.Api.Hubs;
 using RPSLS.Api.Interfaces;
 using RPSLS.Api.Repositories;
 using RPSLS.Api.Services;
@@ -18,8 +19,13 @@ namespace RPSLS.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSignalR();
+
             builder.Services.AddTransient<IRoomService, RoomService>();
+            builder.Services.AddTransient<IGameService, GameService>();
+
             builder.Services.AddTransient<IRoomRepository, RoomRepository>();
+            builder.Services.AddTransient<IGameRepository, GameRepository>();
 
             builder.Services.AddDbContext<RPSLSDbContext>(o =>
             {
@@ -37,8 +43,9 @@ namespace RPSLS.Api
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.MapHub<GameHub>("/gameHub");
 
             app.Run();
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using RPSLS.Api.Data.Models;
+using RPSLS.Api.Hubs;
 using RPSLS.Api.Interfaces;
 using RPSLS.Api.Services;
 
@@ -7,20 +9,24 @@ namespace RPSLS.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RoomController : ControllerBase
+    public class RoomController(IRoomService room, IHubContext<GameHub> hub) : ControllerBase
     {
-        private readonly IRoomService roomService;
+        private readonly IRoomService roomService = room;
 
-        public RoomController(IRoomService room)
-        {
-            roomService = room;
-        }
-
+        private readonly IHubContext<GameHub> hubContext = hub;
 
         [HttpPost("")]
         public IActionResult CreateRoom(String playerName, bool publicRoom = true)
         {
             var room = RoomModel.FromDTO(roomService.CreateRoom(playerName, publicRoom));
+
+            return Ok(room);
+        }
+
+        [HttpGet("list-public-rooms")]
+        public IActionResult ListPublicRooms(bool showFull = false)
+        {
+            var room = roomService.List(publicRoom: true, showFull).Select(r => RoomModel.FromDTO(r));
 
             return Ok(room);
         }

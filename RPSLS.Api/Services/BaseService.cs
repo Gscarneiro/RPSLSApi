@@ -3,14 +3,8 @@ using RPSLS.Api.Data;
 
 namespace RPSLS.Api.Services
 {
-    public class BaseService
+    public class BaseService(RPSLSDbContext context)
     {
-
-        protected RPSLSDbContext DbContext { get; }
-
-        public BaseService(RPSLSDbContext context)
-        {
-            DbContext = context;
-        }
+        protected RPSLSDbContext DbContext { get; } = context;
     }
 }

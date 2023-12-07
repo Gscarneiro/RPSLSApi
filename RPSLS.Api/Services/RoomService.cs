@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RPSLS.Api.Data;
 using RPSLS.Api.Data.DTO;
+using RPSLS.Api.Data.Enums;
 using RPSLS.Api.Interfaces;
 
 namespace RPSLS.Api.Services
 {
-    public class RoomService(RPSLSDbContext context, IRoomRepository room) : BaseService(context), IRoomService
+    public class RoomService(RPSLSDbContext context, IRoomRepository room, IGameService game) : BaseService(context), IRoomService
     {
         private readonly IRoomRepository roomRepository = room;
+        private readonly IGameService gameService = game;
 
         public Room CreateRoom(string playerName, bool publicRoom = true)
         {
@@ -18,6 +20,11 @@ namespace RPSLS.Api.Services
             DbContext.SaveChanges();
 
             return room;
+        }
+
+        public List<Room> List(bool? publicRoom = null, bool showFull = false)
+        {
+            return roomRepository.List(publicRoom, showFull);
         }
 
         public Room JoinRoom(Guid roomId, string playerName)
@@ -54,11 +61,14 @@ namespace RPSLS.Api.Services
                 throw new KeyNotFoundException();
             }
 
+            gameService.UpdateStatus(roomId, Status.WaitingForPlayerToJoin);
+
             roomRepository.Update(room);
 
             DbContext.SaveChanges();
 
             return room;
         }
+
     }
 }
