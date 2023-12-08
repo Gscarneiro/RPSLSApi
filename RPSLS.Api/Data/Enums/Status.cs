@@ -5,7 +5,6 @@
         WaitingForPlayerToJoin,
         GameStarted,
         WaitingForPlayerToSelect,
-        BothSelected,
         GameEnded,
     }
 }

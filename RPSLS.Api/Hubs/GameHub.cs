@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using RPSLS.Api.Data.Enums;
+using RPSLS.Api.Data.Models;
 using RPSLS.Api.Interfaces;
 using RPSLS.Api.Services;
 using System.Collections.Concurrent;
@@ -45,9 +46,9 @@ namespace RPSLS.Api.Hubs
 
         public async Task CreateNewGame(string roomId)
         {
-            var game = gameService.CreateGame(Guid.Parse(roomId));
+            var newGame = GameModel.FromDTO(gameService.CreateGame(Guid.Parse(roomId)));
 
-            await Clients.Group(roomId).SendAsync("StartNewGame", $"Start a new game!", game);
+            await Clients.Group(roomId).SendAsync("StartNewGame", $"Start a new game!", newGame);
         }
     }
 }

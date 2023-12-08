@@ -14,13 +14,13 @@ namespace RPSLS.Api.Data.DTO
 
         public virtual Room Room { get; set; }
 
-        public static Game Create(Guid? roomId = null)
+        public static Game Create(Guid? roomId = null, Status status = Status.WaitingForPlayerToJoin)
         {
             return new Game() {
                 Id = Guid.NewGuid(),
                 RoomId = roomId ?? Guid.NewGuid(),
                 Date = DateTime.UtcNow,
-                Status = Status.WaitingForPlayerToJoin
+                Status = status
             };
         }
 

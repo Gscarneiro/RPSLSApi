@@ -13,7 +13,7 @@ namespace RPSLS.Api.Services
 
         public Game CreateGame(Guid roomId)
         {
-            var game = Game.Create(roomId);
+            var game = Game.Create(roomId, Status.GameStarted);
 
             gameRepository.Insert(game);
 
