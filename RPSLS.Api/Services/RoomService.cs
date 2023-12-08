@@ -11,9 +11,9 @@ namespace RPSLS.Api.Services
         private readonly IRoomRepository roomRepository = room;
         private readonly IGameService gameService = game;
 
-        public Room CreateRoom(string playerName, string roomName, bool publicRoom = true)
+        public Room CreateRoom(string roomName, Guid playerId, bool publicRoom = true)
         {
-            var room = Room.Create(playerName, roomName, publicRoom);
+            var room = Room.Create(roomName, playerId, publicRoom);
             
             roomRepository.Insert(room);
 
@@ -27,15 +27,15 @@ namespace RPSLS.Api.Services
             return roomRepository.List(publicRoom, showFull);
         }
 
-        public Room JoinRoom(Guid roomId, string playerName)
+        public Room JoinRoom(Guid roomId, Guid playerId)
         {
             var room = roomRepository.Query().Include(x => x.PlayerOne).Include(x => x.PlayerTwo).Include(x => x.GamesList)
                 .FirstOrDefault(r => r.Id == roomId) ?? throw new KeyNotFoundException();
 
             if(room.PlayerOneId == null) { 
-                room.PlayerOne = Player.Create(playerName);
+                room.PlayerOneId = playerId;
             } else if (room.PlayerTwoId == null) {
-                room.PlayerTwo = Player.Create(playerName);
+                room.PlayerTwoId = playerId;
             } else {
                 throw new Exception("Room is Full!");
             }

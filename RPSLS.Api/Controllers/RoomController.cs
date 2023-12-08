@@ -16,9 +16,9 @@ namespace RPSLS.Api.Controllers
         private readonly IHubContext<GameHub> hubContext = hub;
 
         [HttpPost("")]
-        public IActionResult CreateRoom(string playerName, string roomName, bool publicRoom = true)
+        public IActionResult CreateRoom(string roomName, Guid playerId, bool publicRoom = true)
         {
-            var room = RoomModel.FromDTO(roomService.CreateRoom(playerName, roomName, publicRoom));
+            var room = RoomModel.FromDTO(roomService.CreateRoom(roomName, playerId, publicRoom));
 
             return Ok(room);
         }
@@ -32,9 +32,9 @@ namespace RPSLS.Api.Controllers
         }
 
         [HttpPut("join/{roomId}")]
-        public async Task<IActionResult> JoinRoom(Guid roomId, String playerName)
+        public async Task<IActionResult> JoinRoom(Guid roomId, Guid playerId)
         {
-            var room = RoomModel.FromDTO(roomService.JoinRoom(roomId, playerName));
+            var room = RoomModel.FromDTO(roomService.JoinRoom(roomId, playerId));
 
             return Ok(room);
         }

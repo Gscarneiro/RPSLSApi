@@ -5,9 +5,9 @@ namespace RPSLS.Api.Interfaces
 {
     public interface IRoomService
     {
-        Room CreateRoom(string playerName, string roomName, bool publicRoom = true);
+        Room CreateRoom(string roomName, Guid playerId, bool publicRoom = true);
         List<Room> List(bool? publicRoom = null, bool showFull = false);
-        Room JoinRoom(Guid roomId, string playerName);
+        Room JoinRoom(Guid roomId, Guid playerId);
         Room LeaveRoom(Guid roomId, Guid playerId);
     }
 }

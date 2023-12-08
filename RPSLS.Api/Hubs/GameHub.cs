@@ -18,7 +18,7 @@ namespace RPSLS.Api.Hubs
 
             gameService.UpdateStatus(Guid.Parse(roomId), Status.GameStarted);
 
-            await Clients.Group(roomId).SendAsync("PlayerJoined", $"{Context.ConnectionId} joined the room.");
+            await Clients.Group(roomId).SendAsync("PlayerJoined", $"{Context.ConnectionId} joined the room.", Status.GameStarted);
         }
 
         public async Task LeaveRoom(string roomId)

@@ -24,9 +24,11 @@ namespace RPSLS.Api
 
             builder.Services.AddTransient<IRoomService, RoomService>();
             builder.Services.AddTransient<IGameService, GameService>();
+            builder.Services.AddTransient<IPlayerService, PlayerService>();
 
             builder.Services.AddTransient<IRoomRepository, RoomRepository>();
             builder.Services.AddTransient<IGameRepository, GameRepository>();
+            builder.Services.AddTransient<IPlayerRepository, PlayerRepository>();
 
             builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder => {
