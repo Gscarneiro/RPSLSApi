@@ -12,6 +12,11 @@ namespace RPSLS.Api.Hubs
     {
         private readonly IGameService gameService = game;
 
+        public async Task CreateRoom(string roomId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        }
+
         public async Task JoinRoom(string roomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
@@ -33,18 +38,9 @@ namespace RPSLS.Api.Hubs
 
         public async Task MakeMove(string roomId, Guid gameId, Guid userId, Move move)
         {
-            var status = gameService.MakeMove(gameId, userId, move) ? Status.BothSelected : Status.WaitingForPlayerToSelect;
+            (Status status, string result) = gameService.MakeMove(gameId, userId, move);
 
-            gameService.UpdateStatus(Guid.Parse(roomId), status);
-
-            await Clients.Group(roomId).SendAsync("MakeMove", Context.ConnectionId, status);
-        }
-
-        public async Task ShowResults(string roomId, Guid gameId)
-        {
-            (var playerOneResult, var playerTwoResult) = gameService.GetGameResult(gameId);
-
-            await Clients.Group(roomId).SendAsync("ShowResult", playerOneResult, playerTwoResult);
+            await Clients.Group(roomId).SendAsync("MakeMove", Context.ConnectionId, status, userId, result);
         }
 
         public async Task CreateNewGame(string roomId)

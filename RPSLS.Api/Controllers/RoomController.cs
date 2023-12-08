@@ -31,7 +31,7 @@ namespace RPSLS.Api.Controllers
             return Ok(room);
         }
 
-        [HttpPut("join/{roomId}")]
+        [HttpPut("join")]
         public async Task<IActionResult> JoinRoom(Guid roomId, Guid playerId)
         {
             var room = RoomModel.FromDTO(roomService.JoinRoom(roomId, playerId));
@@ -39,7 +39,7 @@ namespace RPSLS.Api.Controllers
             return Ok(room);
         }
 
-        [HttpPut("leave/{roomId}")]
+        [HttpPut("leave")]
         public async Task<IActionResult> LeaveRoom(Guid roomId, Guid playerId)
         {
             var room = RoomModel.FromDTO(roomService.LeaveRoom(roomId, playerId));

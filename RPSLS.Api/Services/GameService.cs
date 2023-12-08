@@ -33,10 +33,11 @@ namespace RPSLS.Api.Services
             DbContext.SaveChanges();
         }
 
-        public bool MakeMove(Guid gameId, Guid playerId, Move move)
+        public (Status status, string result) MakeMove(Guid gameId, Guid playerId, Move move)
         {
             var game = gameRepository.Query()
-                .Include(a => a.Room)
+                .Include(x => x.Room).ThenInclude(Room => Room.PlayerOne)
+                .Include(x => x.Room).ThenInclude(Room => Room.PlayerTwo)
                 .FirstOrDefault(g => g.Id == gameId);
 
             if(game.Room.PlayerOneId == playerId) {
@@ -47,30 +48,40 @@ namespace RPSLS.Api.Services
                 throw new KeyNotFoundException();
             }
 
+            if(game.PlayerOneMove.HasValue && game.PlayerTwoMove.HasValue) {
+                GetGameResult(game);
+            } else {
+                game.Status = Status.WaitingForPlayerToSelect;
+            }
+
             gameRepository.Update(game);
+
+            var status = game.Status;
+
+            var result = game.Result;
 
             DbContext.SaveChanges();
 
-            return game.PlayerOneMove.HasValue && game.PlayerTwoMove.HasValue;
+            return (status, result);
         }
 
 
-        public (Result playerOneResult, Result playerTwoResult) GetGameResult(Guid gameId)
+        public string GetGameResult(Game game)
         {
-            var game = gameRepository.GetById(gameId);
-
             var playerOneResult = GameRules.Rules.Single(gs => gs.Player == game.PlayerOneMove && gs.Opponent == game.PlayerTwoMove).Result;
             var playerTwoResult = GameRules.Rules.Single(gs => gs.Player == game.PlayerTwoMove && gs.Opponent == game.PlayerOneMove).Result;
 
-            game.Result = playerOneResult == Result.Win ? "Player One Wins!" : playerTwoResult == Result.Win ? "Player Two Wins!" : "Draw!";
+            if(playerOneResult == Result.Win) {
+                game.Result = $"{game.Room.PlayerOne.Name} Wins!";
+            } else if(playerTwoResult == Result.Win) {
+                game.Result = $"{game.Room.PlayerOne.Name} Wins!";
+            } else {
+                game.Result = $"It's a Draw!";
+            }
 
             game.Status = Status.GameEnded;
 
-            gameRepository.Update(game);
-
-            DbContext.SaveChanges();
-
-            return (playerOneResult, playerTwoResult);
+            return game.Result;
         }
     }
 }

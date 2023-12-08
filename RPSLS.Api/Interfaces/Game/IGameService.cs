@@ -9,8 +9,6 @@ namespace RPSLS.Api.Interfaces
 
         void UpdateStatus(Guid roomId, Status status);
 
-        bool MakeMove(Guid gameId, Guid playerId, Move move);
-
-        (Result playerOneResult, Result playerTwoResult) GetGameResult(Guid gameId);
+        (Status status, string result) MakeMove(Guid gameId, Guid playerId, Move move);
     }
 }
