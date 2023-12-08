@@ -16,14 +16,14 @@ namespace RPSLS.Api.Controllers
         private readonly IHubContext<GameHub> hubContext = hub;
 
         [HttpPost("")]
-        public IActionResult CreateRoom(String playerName, bool publicRoom = true)
+        public IActionResult CreateRoom(string playerName, string roomName, bool publicRoom = true)
         {
-            var room = RoomModel.FromDTO(roomService.CreateRoom(playerName, publicRoom));
+            var room = RoomModel.FromDTO(roomService.CreateRoom(playerName, roomName, publicRoom));
 
             return Ok(room);
         }
 
-        [HttpGet("list-public-rooms")]
+        [HttpGet("list-public")]
         public IActionResult ListPublicRooms(bool showFull = false)
         {
             var room = roomService.List(publicRoom: true, showFull).Select(r => RoomModel.FromDTO(r));

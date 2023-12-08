@@ -8,6 +8,8 @@ namespace RPSLS.Api.Data.Models
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
         [JsonPropertyName("playerOne")]
         public PlayerModel? PlayerOne { get; set; }
         [JsonPropertyName("playerTwo")]
@@ -25,6 +27,7 @@ namespace RPSLS.Api.Data.Models
         {
             return new RoomModel() {
                 Id = dto.Id,
+                Name = dto.Name,
                 PlayerOne = PlayerModel.FromDTO(dto.PlayerOne),
                 PlayerTwo = PlayerModel.FromDTO(dto.PlayerTwo),
                 Public = dto.Public,

@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RPSLS.Api.Data;
 using RPSLS.Api.Hubs;
 using RPSLS.Api.Interfaces;
@@ -27,8 +28,15 @@ namespace RPSLS.Api
             builder.Services.AddTransient<IRoomRepository, RoomRepository>();
             builder.Services.AddTransient<IGameRepository, GameRepository>();
 
-            builder.Services.AddDbContext<RPSLSDbContext>(o =>
-            {
+            builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+            builder => {
+                builder.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .SetIsOriginAllowed((host) => true)
+                        .AllowCredentials();
+            }));
+
+            builder.Services.AddDbContext<RPSLSDbContext>(o => {
                 o.UseInMemoryDatabase(databaseName: "RPSLS", b => b.EnableNullChecks(false));
             });
 
@@ -40,10 +48,12 @@ namespace RPSLS.Api
             }
 
             app.UseHttpsRedirection();
-
+            
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.UseCors("CorsPolicy");
 
             app.MapHub<GameHub>("/gameHub");
 

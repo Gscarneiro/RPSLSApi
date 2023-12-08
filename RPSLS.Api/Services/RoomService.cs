@@ -11,9 +11,9 @@ namespace RPSLS.Api.Services
         private readonly IRoomRepository roomRepository = room;
         private readonly IGameService gameService = game;
 
-        public Room CreateRoom(string playerName, bool publicRoom = true)
+        public Room CreateRoom(string playerName, string roomName, bool publicRoom = true)
         {
-            var room = Room.Create(playerName, publicRoom);
+            var room = Room.Create(playerName, roomName, publicRoom);
             
             roomRepository.Insert(room);
 
