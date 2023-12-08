@@ -56,27 +56,22 @@ namespace RPSLS.Api.Services
 
             gameRepository.Update(game);
 
-            var status = game.Status;
-
-            var result = game.Result;
-
             DbContext.SaveChanges();
 
-            return (status, result);
+            return (game.Status, game.Result);
         }
 
 
         public string GetGameResult(Game game)
         {
-            var playerOneResult = GameRules.Rules.Single(gs => gs.Player == game.PlayerOneMove && gs.Opponent == game.PlayerTwoMove).Result;
-            var playerTwoResult = GameRules.Rules.Single(gs => gs.Player == game.PlayerTwoMove && gs.Opponent == game.PlayerOneMove).Result;
-
-            if(playerOneResult == Result.Win) {
-                game.Result = $"{game.Room.PlayerOne.Name} Wins!";
-            } else if(playerTwoResult == Result.Win) {
+            var result = GameRules.Rules.Single(gs => gs.Player == game.PlayerOneMove && gs.Opponent == game.PlayerTwoMove).Result;
+            
+            if(result == Result.Draw) {
+                game.Result = $"It's a Draw!";
+            } else if(result == Result.Win) {
                 game.Result = $"{game.Room.PlayerOne.Name} Wins!";
             } else {
-                game.Result = $"It's a Draw!";
+                game.Result = $"{game.Room.PlayerTwo.Name} Wins!";
             }
 
             game.Status = Status.GameEnded;
