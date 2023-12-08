@@ -3,4 +3,4 @@
 API developed in .NET 8 using SignalR, OOP, Dependency Injection and In Memory Database.
 
 ## Frontend
-[Github repository](https://github.com/angular/angular-cli](https://github.com/Gscarneiro/mf-RPSLS)https://github.com/Gscarneiro/mf-RPSLS)
+[Github repository](https://github.com/Gscarneiro/mf-RPSLS)
